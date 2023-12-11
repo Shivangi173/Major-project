@@ -1,0 +1,30 @@
+library(e1071)
+library(caret)
+library (glmnet)
+library (psych)
+library(mlbench)
+#data
+
+data<-read.csv(
+  "C:/Users/91885/Downloads/data.csv"
+)
+str(data)
+?data
+#pairs.panels(data[c(-4,-14)])
+
+
+train=data[1:403,]
+test=data[404:569,]
+levels(train$diagnosis)
+model = naiveBayes(diagnosis~., data = train)
+class(model)
+pred<-predict(model,test)
+pred
+table(test$diagnosis)
+
+
+#confusion matrix
+table(test$diagnosis, pred)
+library(scales)
+
+accuracy = percent((120+35)/166)
