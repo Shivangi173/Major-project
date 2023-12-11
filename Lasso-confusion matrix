@@ -1,0 +1,30 @@
+library(caret)
+library (glmnet)
+library (psych)
+library(mlbench)
+#data
+
+data<-read.csv(
+  "C:/Users/91885/Downloads/data.csv"
+)
+str(data)
+#?data
+#pairs.panels(data[c(-4,-14)])
+
+
+train=data[1:353,]
+test=data[354:506,]
+levels(train$chas)
+lasso=train(diagnosis~., data = train,method = 'glmnet')
+
+class(lasso)
+predc<-predict(lasso,test)
+predc
+table(test$diagnosis)
+lassoImp = (varImp(lasso, scale = TRUE))
+plot(lassoImp, top = 10)
+
+#confusion matrix
+table(test$diagnosis, predc)
+library(scales)
+accuracy = percent((113+37)/153)
